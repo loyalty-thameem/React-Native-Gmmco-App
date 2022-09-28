@@ -20,18 +20,35 @@ const LoginScreen = ({ navigation: { navigate } }) => {
     const customStyle = focus.style1 ? styles.passwordContainerActive : styles.passwordContainer;
     const customStyle2 = focus.style2 ? styles.inputBoxContainer1Acitve : styles.inputBoxContainer1;
     const customStyle3 = focus.style3 ? styles.inputBoxContainer2Acitve : styles.inputBoxContainer2;
-    //    LOCALSTORAGE FOR USERPHONE AND USERPAN...
-    const value = {
-        userPhoneNumber: phone,
-        userPanNumber: pan
-    }
-    const storeUser = async () => {
+    //    LOCALSTORAGE FOR SET USERPHONE AND USERPAN...
+    // const value = {
+    //     userPhoneNumber: phone,
+    //     userPanNumber: pan
+    // }
+    // const storeUser = async () => {
+    //     try {
+    //       await AsyncStorage.setItem("user", JSON.stringify(value));
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   };
+    //    LOCALSTORAGE FOR GET USERPHONE AND USERPAN...
+    const [user, setUser] = React.useState([]);
+    // console.log('Login Stored User Details ', user[0].userMobileNumber);
+    const getUser = async () => {
         try {
-          await AsyncStorage.setItem("user", JSON.stringify(value));
+            const savedUser = await AsyncStorage.getItem('users');
+            const currentUser = JSON.parse(savedUser);
+            console.log('Login localStorage items are ', currentUser);
+            setUser(oldArray => [...oldArray, currentUser]);
+
         } catch (error) {
-          console.log(error);
+            console.log('Error', error);
         }
-      };
+    }
+    React.useEffect(() => {
+        getUser();
+    }, []);
     //loginValidate
     const loginValidate = async () => {
         if (phone.length === 0) {
@@ -44,15 +61,19 @@ const LoginScreen = ({ navigation: { navigate } }) => {
             Alert.alert('Please enter password number');
         }
         else if (checked === true) {
-            console.log('thank you');
+            // console.log('thank you');
             //LOCALSTORAGE PASSED TO HOME SCREEN
-            storeUser();
+            // storeUser();
+            // navigate('Home');
+        }
+        else if(phone ===  user[0].userMobileNumber && pan ===  user[0].userPanNumber && pass ===  user[0].userPassword){
             navigate('Home');
+            Alert.alert('thank you');
         }
         else {
             console.log('mr.else');
             //LOCALSTORAGE PASSED TO OTP SCREEN
-            storeUser();
+            // storeUser();
             navigate('Otp');
 
         }
