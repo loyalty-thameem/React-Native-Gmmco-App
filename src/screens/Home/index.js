@@ -92,8 +92,8 @@ const HomeScreen = () => {
                         </TouchableOpacity>
                         <View style={styles.headerTextContainer}>
                             <Text style={styles.welcomeText}>{"Welcome!"}</Text>
-                            <Text style={styles.userNameText}>{"Bharanidharan"}</Text>
-                            {/* {
+                            {/* <Text style={styles.userNameText}>{"Bharanidharan"}</Text> */}
+                            {
                                 user.map((item, index) => {
                                     return (
                                         <View key={index}>
@@ -101,7 +101,7 @@ const HomeScreen = () => {
                                         </View>
                                     )
                                 })
-                            } */}
+                            }
                         </View>
                     </View>
                     <TouchableOpacity style={styles.purchaseIconContainer}>
