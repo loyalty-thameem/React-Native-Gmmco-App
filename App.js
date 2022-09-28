@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
 import SplashScreen from 'react-native-splash-screen'
 import LoginScreen from './src/screens/Login'
@@ -48,7 +48,7 @@ const App = () => {
             headerStyle: {
               backgroundColor: '#FCBA13'
             },
-            headerShown:false
+            headerShown:false,
           }}
         />
         <Stack.Screen name={'Register'} component={RegisterScreen}
