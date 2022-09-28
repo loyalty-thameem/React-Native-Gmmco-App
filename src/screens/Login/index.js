@@ -60,21 +60,24 @@ const LoginScreen = ({ navigation: { navigate } }) => {
         else if (checked && pass.length === 0) {
             Alert.alert('Please enter password number');
         }
-        else if (checked === true) {
-            // console.log('thank you');
-            //LOCALSTORAGE PASSED TO HOME SCREEN
-            // storeUser();
-            // navigate('Home');
+        // else if (checked === true) {
+        // console.log('thank you');
+        //LOCALSTORAGE PASSED TO HOME SCREEN
+        // storeUser();
+        // navigate('Home');
+        // }
+        else if (checked === false) {
+            navigate('Otp');
         }
-        else if(phone ===  user[0].userMobileNumber && pan ===  user[0].userPanNumber && pass ===  user[0].userPassword){
+        else if (checked === true && phone === user[0].userMobileNumber && pan === user[0].userPanNumber && pass === user[0].userPassword) {
             navigate('Home');
             Alert.alert('thank you');
         }
         else {
-            console.log('mr.else');
+            Alert.alert('Your login details invalid');
             //LOCALSTORAGE PASSED TO OTP SCREEN
             // storeUser();
-            navigate('Otp');
+            // navigate('Otp');
 
         }
     }
