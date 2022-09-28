@@ -1,4 +1,4 @@
-import { BackHandler, FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { BackHandler, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomeData from '../LocalData/HomeData';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,7 +8,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 const HomeScreen = () => {
     //LOCALSTORAGE GETITEMS HERE
     const [user, setUser] = React.useState([]);
-    //SEARCHING
+   
     const [searching, setSearching] = React.useState();
     const [borderStyle, setBorderStyle] = React.useState(false);
     const focusStyle = borderStyle ? styles.searchingPartsContainerFocus : styles.searchingPartsContainer;
@@ -54,22 +54,23 @@ const HomeScreen = () => {
             </View>
         )
     }
-
+    //AFTER LONG TIME(3hrs) SOLVED ISSUE. I USED BELOW WAY... CONT1
+    const [user2, setUser2] = React.useState([]);
+    // console.log('User2',user2);
+    React.useEffect(()=>{
+        let users =  user.map((item, index) => {
+            console.log('thameem  ansari ',item);
+            // return (
+                setUser2(item.userMobileNumber)
+            // )
+        });
+        console.log('useeffect',users);
+        // MUST PASS DEPENDENCY ARRAY...
+    },[user])
+   
 
     return (
-        // <View>
-        //     <Text> {"HomeScreen"} </Text>
-        //     {
-        //         user.map((item, index) => {
-        //             return (
-        //                 <View key={index}>
-        //                     <Text>{item.userPhoneNumber}</Text>
-        //                     <Text>{item.userPanNumber}</Text>
-        //                 </View>
-        //             )
-        //         })
-        //     }
-        // </View>
+
         <View style={styles.container}>
             <StatusBar
                 //Animated true is take time to animated. we can check the slowly updated the status bar.
@@ -77,78 +78,94 @@ const HomeScreen = () => {
                 backgroundColor="#000103"
                 barStyle={'light-content'}
             />
-            <View style={styles.customizedHeaderContainer}>
-                <View style={styles.headerBackgroundImageContainer}>
-                    <Image
-                        source={require('../../assets/images/header-background.png')}
-                        style={styles.headerBackgroundImage} />
-                </View>
-                <View style={styles.header}>
-                    <View style={styles.iconAndTextHeader}>
-                        <TouchableOpacity style={styles.groupMenuIconContainer}>
-                            <Image
-                                source={require('../../assets/images/group-menu.png')}
-                                style={styles.groupMenuLogo} />
-                        </TouchableOpacity>
-                        <View style={styles.headerTextContainer}>
-                            <Text style={styles.welcomeText}>{"Welcome!"}</Text>
-                            {/* <Text style={styles.userNameText}>{"Bharanidharan"}</Text> */}
-                            {
-                                user.map((item, index) => {
-                                    return (
-                                        <View key={index}>
-                                            <Text style={styles.userNameText}>{item.userMobileNumber}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <>
+                        <View style={styles.customizedHeaderContainer}>
+                            <View style={styles.headerBackgroundImageContainer}>
+                                <Image
+                                    source={require('../../assets/images/header-background.png')}
+                                    style={styles.headerBackgroundImage} />
+                            </View>
+
+                            <View style={styles.header}>
+                                <View style={styles.iconAndTextHeader}>
+                                    <TouchableOpacity style={styles.groupMenuIconContainer}>
+                                        <Image
+                                            source={require('../../assets/images/group-menu.png')}
+                                            style={styles.groupMenuLogo} />
+                                    </TouchableOpacity>  
+                                    <View style={styles.headerTextContainer}>
+                                        <Text style={styles.welcomeText}>{"Welcome!"}</Text>
+                                        {/* <Text style={styles.userNameText}>{"Bharanidharan"}</Text> */}
+                                        {/* AFTER SOLVED ISSUE AND ADDED BELOW LINE FOR CLEARED ISSUE...CONT1 */}
+                                        <Text style={styles.userNameText}>{user2}</Text> 
+                                        {/* {
+                                            user.map((item, index) => {
+                                                console.log('thameem  ansari ',item);
+                                                return (
+                                                    <View key={index}>
+                                                        <Text style={styles.userNameText}>{item.userMobileNumber}</Text>
+                                                    </View>
+                                                )
+                                            })
+                                        } */}
+                                    </View>
+                                </View>
+                                <TouchableOpacity style={styles.purchaseIconContainer}>
+                                    <Image
+                                        source={require('../../assets/images/shopping-cart.png')}
+                                        style={styles.purchaseIcon} />
+                                    <View style={styles.notificationContainer}>
+                                        <Text style={styles.notificationText}>{"3"}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={focusStyle}>
+                                <View style={styles.searchingPartsInputContainer}>
+                                    <TextInput
+                                        style={styles.searchingInput}
+                                        value={searching}
+                                        onChangeText={(searchingEvent) => {
+                                            console.log(searchingEvent);
+                                        }}
+                                        placeholder={"Search Parts"}
+                                        placeholderTextColor={"white"}
+                                        onFocus={() => {
+                                            setBorderStyle(true)
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.searchingIconContainer}>
+                                    <Ionicons
+                                        name="search"
+                                        size={20}
+                                        color={'black'}
+                                        style={styles.searchingIcon} />
+                                </View>
+                            </View>
+
                         </View>
-                    </View>
-                    <TouchableOpacity style={styles.purchaseIconContainer}>
-                        <Image
-                            source={require('../../assets/images/shopping-cart.png')}
-                            style={styles.purchaseIcon} />
-                        <View style={styles.notificationContainer}>
-                            <Text style={styles.notificationText}>{"3"}</Text>
+
+                        <View style={styles.mainContentOfContainer}>
+                            <FlatList
+                                data={HomeData}
+                                // IT'S GOOD BUT IT'S OLD VERSION TO USE. I HAVE A WARN ISSUE...
+                                // contentContainerStyle={styles.list}
+                                renderItem={renderItem}
+                                keyExtractor={item => item.id}
+                                // IT'S MAYBE NEW VERSION TO USE. I HAVEN'T NO WARN ISSUE...
+                                columnWrapperStyle={styles.list}
+                                numColumns={2}
+                            />
                         </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={focusStyle}>
-                    <View style={styles.searchingPartsInputContainer}>
-                        <TextInput
-                            style={styles.searchingInput}
-                            value={searching}
-                            onChangeText={(searchingEvent) => {
-                                console.log(searchingEvent);
-                            }}
-                            placeholder={"Search Parts"}
-                            placeholderTextColor={"white"}
-                            onFocus={() => {
-                                setBorderStyle(true)
-                            }}
-                        />
-                    </View>
-                    <View style={styles.searchingIconContainer}>
-                        <Ionicons
-                            name="search"
-                            size={20}
-                            color={'black'}
-                            style={styles.searchingIcon} />
-                    </View>
-                </View>
-            </View>
-            <View style={styles.mainContentOfContainer}>
-                <FlatList
-                    data={HomeData}
-                    // IT'S GOOD BUT IT'S OLD VERSION TO USE. I HAVE A WARN ISSUE...
-                    // contentContainerStyle={styles.list}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                    // IT'S MAYBE NEW VERSION TO USE. I HAVEN'T NO WARN ISSUE...
-                    columnWrapperStyle={styles.list}
-                    numColumns={2}
-                />
-            </View>
+                    </>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
             <View style={styles.bottomMainContainer}>
                 <View style={styles.bottomContainer}>
                     <Text style={styles.reminderText}>{"Reminder"}</Text>
@@ -220,6 +237,7 @@ const HomeScreen = () => {
                 </View>
             </View>
         </View>
+
     )
 }
 
