@@ -3,6 +3,7 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const RegisterScreen = ({ navigation: { navigate } }) => {
   //CheckBox
   const [checkedBox, setCheckedBox] = React.useState(false);
@@ -27,14 +28,14 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
   const customStyle7 = focus.style7 ? styles.textInputContainer7Active : styles.textInputContainer7;
   const customStyle8 = focus.style8 ? styles.textInputContainer8Active : styles.textInputContainer8;
   //Content data for TEXTINPUT...
-  const [userName,setUserName] =React.useState('');
-  const [companyName,setCompanyName] =React.useState('');
-  const [address,setAddress] =React.useState('');
-  const [pinCode,setPinCode] =React.useState('');
-  const [mobileNumber,setMobileNumber] =React.useState('');
-  const [panNumber,setPanNumber] =React.useState('');
-  const [password,setPassword] =React.useState('');
-  const [confirmPassword,setConfirmPassword] =React.useState('');
+  const [userName, setUserName] = React.useState('');
+  const [companyName, setCompanyName] = React.useState('');
+  const [address, setAddress] = React.useState('');
+  const [pinCode, setPinCode] = React.useState('');
+  const [mobileNumber, setMobileNumber] = React.useState('');
+  const [panNumber, setPanNumber] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
   // I CAN'T VALUE THE OBJECT VALUE PROPERLY FOR VALIDATE
   // const [textInput, setTextInput] = React.useState({
   //   userName: '',
@@ -46,12 +47,26 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
   //   password: '',
   //   confirmPassword: ''
   // });
+  //LOCALSTORAGE FOR PHONE AND PAN NUMBER AND PASSWORD...
+  const userRegisterDetails = {
+    userMobileNumber: mobileNumber,
+    userPanNumber: panNumber,
+    userPassword: password
+  }
+  console.log('userRegisterDetails is ',userRegisterDetails);
+  const storeUser = async () => {
+    try {
+      await AsyncStorage.setItem('users', JSON.stringify(userRegisterDetails));
+    } catch (error) {
+      console.log('Error', error);
+    }
+  }
   //registerValidation
   const registerValidation = () => {
     if (userName === '') {
       Alert.alert('Please enter username')
     }
-    else if(companyName === '') {
+    else if (companyName === '') {
 
       Alert.alert('Please enter company name')
     }
@@ -81,6 +96,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
     }
     else if (userName && companyName && address && pinCode && mobileNumber && panNumber && password && checkedBox && confirmPassword && password === confirmPassword) {
       Alert.alert('Thank you')
+      storeUser();
       navigate('Home');
     }
     else {
@@ -109,7 +125,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                 style={styles.userNameInput}
                 value={userName}
                 onChangeText={(userNameValue) => {
-                  setUserName( userNameValue )
+                  setUserName(userNameValue)
                 }}
                 placeholderTextColor={focus.style1 ? '#FCBA13' : '#A5A5A5'}
                 placeholder={'USERNAME'}
@@ -141,7 +157,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
               <TextInput
                 value={address}
                 onChangeText={(addressValue) => {
-                  setAddress(addressValue )
+                  setAddress(addressValue)
                 }}
                 placeholderTextColor={focus.style3 ? '#FCBA13' : '#A5A5A5'}
                 placeholder={'ADDRESS'}
@@ -178,7 +194,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                 value={mobileNumber}
                 keyboardType='numeric'
                 onChangeText={(mobileNumberValue) => {
-                  setMobileNumber(mobileNumberValue.replace(/[^0-9]/g, '') )
+                  setMobileNumber(mobileNumberValue.replace(/[^0-9]/g, ''))
                 }}
                 placeholderTextColor={focus.style5 ? '#FCBA13' : '#A5A5A5'}
                 placeholder={'MOBILE NUMBER'}
@@ -186,6 +202,7 @@ const RegisterScreen = ({ navigation: { navigate } }) => {
                 onFocus={() => {
                   setFocus({ style5: !false })
                 }}
+                maxLength={10}
               />
             </View>
             <View style={customStyle6}>
