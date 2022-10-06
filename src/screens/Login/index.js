@@ -73,6 +73,9 @@ const LoginScreen = ({ navigation: { navigate } }) => {
             navigate('Home');
             Alert.alert('thank you');
         }
+        // else if(user[0].userMobileNumber === null || user[0].userPanNumber === null || user[0].userPassword === null){
+        //     Alert.alert('Please Register');
+        // }
         else {
             Alert.alert('Your login details invalid');
             //LOCALSTORAGE PASSED TO OTP SCREEN

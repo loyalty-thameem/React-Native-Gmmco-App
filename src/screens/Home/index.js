@@ -1,9 +1,10 @@
-import { BackHandler, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Alert, BackHandler, Button, DrawerLayoutAndroid, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomeData from '../LocalData/HomeData';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React, { useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
+import NavigationView from '../Drawer/NavigationView';
 
 const HomeScreen = () => {
     //LOCALSTORAGE GETITEMS HERE
@@ -68,10 +69,17 @@ const HomeScreen = () => {
         // MUST PASS DEPENDENCY ARRAY...
     },[user])
    
-
+    const drawer = useRef(null);
+   
+    
     return (
 
         <View style={styles.container}>
+             <DrawerLayoutAndroid
+      ref={drawer}
+      drawerWidth={270}
+      renderNavigationView={NavigationView}
+    >
             <StatusBar
                 //Animated true is take time to animated. we can check the slowly updated the status bar.
                 animated={true}
@@ -93,16 +101,18 @@ const HomeScreen = () => {
 
                             <View style={styles.header}>
                                 <View style={styles.iconAndTextHeader}>
-                                    <TouchableOpacity style={styles.groupMenuIconContainer}>
+                                    <TouchableOpacity style={styles.groupMenuIconContainer}
+                                    onPress={() => drawer.current.openDrawer()}
+                                    >
                                         <Image
                                             source={require('../../assets/images/group-menu.png')}
                                             style={styles.groupMenuLogo} />
                                     </TouchableOpacity>  
                                     <View style={styles.headerTextContainer}>
                                         <Text style={styles.welcomeText}>{"Welcome!"}</Text>
-                                        {/* <Text style={styles.userNameText}>{"Bharanidharan"}</Text> */}
+                                        <Text style={styles.userNameText}>{"Bharanidharan"}</Text>
                                         {/* AFTER SOLVED ISSUE AND ADDED BELOW LINE FOR CLEARED ISSUE...CONT1 */}
-                                        <Text style={styles.userNameText}>{user2}</Text> 
+                                        {/* <Text style={styles.userNameText}>{user2}</Text>  */}
                                         {/* {
                                             user.map((item, index) => {
                                                 console.log('thameem  ansari ',item);
@@ -236,6 +246,7 @@ const HomeScreen = () => {
                     <Text style={styles.invoiceNoText}>{"#GMM254549687"}</Text>
                 </View>
             </View>
+            </DrawerLayoutAndroid>
         </View>
 
     )
@@ -379,7 +390,8 @@ const styles = StyleSheet.create({
     flatlistItemsContainer: {
         backgroundColor: '#191B1D',
         width: 170,
-        height: 135,
+        // height: 135,
+        height: 115,
         margin: 7,
         justifyContent: 'center',
         alignItems: 'center',
@@ -405,7 +417,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         position: 'absolute',
         left: 90,
-        top: -15
+        top: -5
     },
     notificationText: {
         fontFamily: 'Univers 67 Condensed',
@@ -418,7 +430,9 @@ const styles = StyleSheet.create({
     bottomMainContainer: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        marginTop: 0,
+        // marginTop: 0,
+        marginBottom:57,
+        // backgroundColor:'green'
     },
     bottomContainer: {
     },
