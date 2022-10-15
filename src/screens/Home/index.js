@@ -6,13 +6,17 @@ import React, { useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 import NavigationView from '../Drawer/NavigationView';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation: { navigate } }) => {
     //LOCALSTORAGE GETITEMS HERE
     const [user, setUser] = React.useState([]);
-   
+
     const [searching, setSearching] = React.useState();
     const [borderStyle, setBorderStyle] = React.useState(false);
     const focusStyle = borderStyle ? styles.searchingPartsContainerFocus : styles.searchingPartsContainer;
+    //MAIN CONTAINER ITEMS IN FOCUS STYLE VIEW
+    const [mainBorderstyle, setMainBorderStyle] = React.useState(false);
+    console.log('mainBorderStyle', mainBorderstyle)
+    const customizedFocusedStyle = mainBorderstyle ? styles.flatlistItemsContainerFocus:styles.flatlistItemsContainer;
     //MODEL VIEW ON PAYMENT
     const refRBSheet = useRef();
 
@@ -43,77 +47,103 @@ const HomeScreen = () => {
     }, []);
     //FLATLIST RENDERITEMS=====>
     const renderItem = ({ item }) => {
+        console.log('Home screen data items from flatlist', item.id)
         return (
-            <View style={styles.flatlistItemsContainer}>
+            <TouchableOpacity style={styles.flatlistItemsContainer}
+                onPress={() => {
+                    if (item.id === 1) {
+                        navigate('OrderParts')
+                    }
+                    else if(item.id === 2){
+                        navigate('MyFleet')
+
+                    }
+                    else if(item.id === 3){
+                        navigate('MyPlan')
+                    }
+                    else if(item.id === 4){
+                        navigate('Assistant')
+                    }
+                    else if(item.id === 5){
+                        navigate('MyQuote')
+                    }
+                }
+                    // setMainBorderStyle(true)
+                    // Alert.alert(JSON.stringify(item.id))
+                }
+            >
                 <View style={styles.flatlistImageAndTextContainer}>
                     <Image source={item.image} style={styles.flatlistImage} />
                     <Text style={styles.flatlistTitleText}>{item.title}</Text>
-                    <View style={styles.notificationFlatlistContainer}>
-                        <Text style={styles.notificationText}>{item.notification}</Text>
-                    </View>
+                    {
+                        item.notification &&
+                        <View style={styles.notificationFlatlistContainer}>
+                            <Text style={styles.notificationText}>{item.notification}</Text>
+                        </View>
+                    }
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
     //AFTER LONG TIME(3hrs) SOLVED ISSUE. I USED BELOW WAY... CONT1
     const [user2, setUser2] = React.useState([]);
     // console.log('User2',user2);
-    React.useEffect(()=>{
-        let users =  user.map((item, index) => {
-            console.log('thameem  ansari ',item);
+    React.useEffect(() => {
+        let users = user.map((item, index) => {
+            console.log('thameem  ansari ', item);
             // return (
-                setUser2(item.userMobileNumber)
+            setUser2(item.userMobileNumber)
             // )
         });
-        console.log('useeffect',users);
+        console.log('useeffect', users);
         // MUST PASS DEPENDENCY ARRAY...
-    },[user])
-   
+    }, [user])
+
     const drawer = useRef(null);
-   
-    
+
+
     return (
 
         <View style={styles.container}>
-             <DrawerLayoutAndroid
-      ref={drawer}
-      drawerWidth={270}
-      renderNavigationView={NavigationView}
-    >
-            <StatusBar
-                //Animated true is take time to animated. we can check the slowly updated the status bar.
-                animated={true}
-                backgroundColor="#000103"
-                barStyle={'light-content'}
-            />
-            <KeyboardAvoidingView
-                style={styles.container}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
+            <DrawerLayoutAndroid
+                ref={drawer}
+                drawerWidth={270}
+                renderNavigationView={NavigationView}
             >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <>
-                        <View style={styles.customizedHeaderContainer}>
-                            <View style={styles.headerBackgroundImageContainer}>
-                                <Image
-                                    source={require('../../assets/images/header-background.png')}
-                                    style={styles.headerBackgroundImage} />
-                            </View>
+                <StatusBar
+                    //Animated true is take time to animated. we can check the slowly updated the status bar.
+                    animated={true}
+                    backgroundColor="#000103"
+                    barStyle={'light-content'}
+                />
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <>
+                            <View style={styles.customizedHeaderContainer}>
+                                <View style={styles.headerBackgroundImageContainer}>
+                                    <Image
+                                        source={require('../../assets/images/header-background.png')}
+                                        style={styles.headerBackgroundImage} />
+                                </View>
 
-                            <View style={styles.header}>
-                                <View style={styles.iconAndTextHeader}>
-                                    <TouchableOpacity style={styles.groupMenuIconContainer}
-                                    onPress={() => drawer.current.openDrawer()}
-                                    >
-                                        <Image
-                                            source={require('../../assets/images/group-menu.png')}
-                                            style={styles.groupMenuLogo} />
-                                    </TouchableOpacity>  
-                                    <View style={styles.headerTextContainer}>
-                                        <Text style={styles.welcomeText}>{"Welcome!"}</Text>
-                                        <Text style={styles.userNameText}>{"Bharanidharan"}</Text>
-                                        {/* AFTER SOLVED ISSUE AND ADDED BELOW LINE FOR CLEARED ISSUE...CONT1 */}
-                                        {/* <Text style={styles.userNameText}>{user2}</Text>  */}
-                                        {/* {
+                                <View style={styles.header}>
+                                    <View style={styles.iconAndTextHeader}>
+                                        <TouchableOpacity style={styles.groupMenuIconContainer}
+                                            onPress={() => drawer.current.openDrawer()}
+                                        >
+                                            <Image
+                                                source={require('../../assets/images/group-menu.png')}
+                                                style={styles.groupMenuLogo} />
+                                        </TouchableOpacity>
+                                        <View style={styles.headerTextContainer}>
+                                            <Text style={styles.welcomeText}>{"Welcome!"}</Text>
+                                            <Text style={styles.userNameText}>{"Bharanidharan"}</Text>
+                                            {/* AFTER SOLVED ISSUE AND ADDED BELOW LINE FOR CLEARED ISSUE...CONT1 */}
+                                            {/* <Text style={styles.userNameText}>{user2}</Text>  */}
+                                            {/* {
                                             user.map((item, index) => {
                                                 console.log('thameem  ansari ',item);
                                                 return (
@@ -123,129 +153,129 @@ const HomeScreen = () => {
                                                 )
                                             })
                                         } */}
+                                        </View>
                                     </View>
-                                </View>
-                                <TouchableOpacity style={styles.purchaseIconContainer}>
-                                    <Image
-                                        source={require('../../assets/images/shopping-cart.png')}
-                                        style={styles.purchaseIcon} />
-                                    <View style={styles.notificationContainer}>
-                                        <Text style={styles.notificationText}>{"3"}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={focusStyle}>
-                                <View style={styles.searchingPartsInputContainer}>
-                                    <TextInput
-                                        style={styles.searchingInput}
-                                        value={searching}
-                                        onChangeText={(searchingEvent) => {
-                                            console.log(searchingEvent);
-                                        }}
-                                        placeholder={"Search Parts"}
-                                        placeholderTextColor={"white"}
-                                        onFocus={() => {
-                                            setBorderStyle(true)
-                                        }}
-                                    />
-                                </View>
-                                <View style={styles.searchingIconContainer}>
-                                    <Ionicons
-                                        name="search"
-                                        size={20}
-                                        color={'black'}
-                                        style={styles.searchingIcon} />
-                                </View>
-                            </View>
-
-                        </View>
-
-                        <View style={styles.mainContentOfContainer}>
-                            <FlatList
-                                data={HomeData}
-                                // IT'S GOOD BUT IT'S OLD VERSION TO USE. I HAVE A WARN ISSUE...
-                                // contentContainerStyle={styles.list}
-                                renderItem={renderItem}
-                                keyExtractor={item => item.id}
-                                // IT'S MAYBE NEW VERSION TO USE. I HAVEN'T NO WARN ISSUE...
-                                columnWrapperStyle={styles.list}
-                                numColumns={2}
-                            />
-                        </View>
-                    </>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-            <View style={styles.bottomMainContainer}>
-                <View style={styles.bottomContainer}>
-                    <Text style={styles.reminderText}>{"Reminder"}</Text>
-                    <View style={styles.firstBottomContainer}>
-                        <Text style={styles.outstandingAmountText}>{"You have an outstanding amount of"}</Text>
-                        <Text style={styles.amountText}>{"₹1,23,000"}</Text>
-                        <TouchableOpacity style={styles.payNowButton}
-                            onPress={() => refRBSheet.current.open()}
-                        >
-                            <Text style={styles.payNowText}>{"Pay Now"}</Text>
-
-                        </TouchableOpacity>
-                        <RBSheet
-                            ref={refRBSheet}
-                            closeOnDragDown={true}
-                            closeOnPressMask={false}
-                            customStyles={{
-                                wrapper: {
-                                    backgroundColor: 'rgba(52, 52, 52, 0.8)'
-                                },
-                                draggableIcon: {
-                                    backgroundColor: "white",
-                                },
-                                container: {
-                                    backgroundColor: 'white',
-                                    borderTopRightRadius: 30,
-                                    borderTopLeftRadius: 30,
-                                    height: 340,
-                                },
-                            }}
-                        >
-                            {/* <MyOwnComponent /> */}
-                            <View style={styles.ModelPopUpContainer}>
-                                <View style={styles.paymentImageContainer}>
-                                    <Image
-                                        source={require('../../assets/images/pending-payment.png')}
-                                        style={styles.paymentLogo} />
-                                </View>
-                                <View style={styles.paymentTextContainer}>
-                                    <Text style={styles.paymentText}>
-                                        You have an outstanding of
-                                        {/* <View style={styles.paymentTextRubeesContainer}> */}
-                                        <Text style={styles.paymentTextRubees}>{" Rs 30,000 "}</Text>
-                                        {/* </View> */}
-                                        with its due date
-                                        overdue, you need to make this payment to proceed
-                                        for Ordering parts.
-                                    </Text>
-                                </View>
-                                <View style={styles.laterAndPayNowContainer}>
-                                    <TouchableOpacity style={styles.laterAndPayFirst}
-                                        onPress={() => refRBSheet.current.close()}
-                                    >
-                                        <Text style={styles.laterText}>Later</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.laterAndPaySecond}>
-                                        <Text style={styles.payText}>Pay Now</Text>
+                                    <TouchableOpacity style={styles.purchaseIconContainer}>
+                                        <Image
+                                            source={require('../../assets/images/shopping-cart.png')}
+                                            style={styles.purchaseIcon} />
+                                        <View style={styles.notificationContainer}>
+                                            <Text style={styles.notificationText}>{"3"}</Text>
+                                        </View>
                                     </TouchableOpacity>
                                 </View>
+
+                                <View style={focusStyle}>
+                                    <View style={styles.searchingPartsInputContainer}>
+                                        <TextInput
+                                            style={styles.searchingInput}
+                                            value={searching}
+                                            onChangeText={(searchingEvent) => {
+                                                console.log(searchingEvent);
+                                            }}
+                                            placeholder={"Search Parts"}
+                                            placeholderTextColor={"white"}
+                                            onFocus={() => {
+                                                setBorderStyle(true)
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={styles.searchingIconContainer}>
+                                        <Ionicons
+                                            name="search"
+                                            size={20}
+                                            color={'black'}
+                                            style={styles.searchingIcon} />
+                                    </View>
+                                </View>
+
                             </View>
-                        </RBSheet>
+
+                            <View style={styles.mainContentOfContainer}>
+                                <FlatList
+                                    data={HomeData}
+                                    // IT'S GOOD BUT IT'S OLD VERSION TO USE. I HAVE A WARN ISSUE...
+                                    // contentContainerStyle={styles.list}
+                                    renderItem={renderItem}
+                                    keyExtractor={item => item.id}
+                                    // IT'S MAYBE NEW VERSION TO USE. I HAVEN'T NO WARN ISSUE...
+                                    columnWrapperStyle={styles.list}
+                                    numColumns={2}
+                                />
+                            </View>
+                        </>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+                <View style={styles.bottomMainContainer}>
+                    <View style={styles.bottomContainer}>
+                        <Text style={styles.reminderText}>{"Reminder"}</Text>
+                        <View style={styles.firstBottomContainer}>
+                            <Text style={styles.outstandingAmountText}>{"You have an outstanding amount of"}</Text>
+                            <Text style={styles.amountText}>{"₹1,23,000"}</Text>
+                            <TouchableOpacity style={styles.payNowButton}
+                                onPress={() => refRBSheet.current.open()}
+                            >
+                                <Text style={styles.payNowText}>{"Pay Now"}</Text>
+
+                            </TouchableOpacity>
+                            <RBSheet
+                                ref={refRBSheet}
+                                closeOnDragDown={true}
+                                closeOnPressMask={false}
+                                customStyles={{
+                                    wrapper: {
+                                        backgroundColor: 'rgba(52, 52, 52, 0.8)'
+                                    },
+                                    draggableIcon: {
+                                        backgroundColor: "white",
+                                    },
+                                    container: {
+                                        backgroundColor: 'white',
+                                        borderTopRightRadius: 30,
+                                        borderTopLeftRadius: 30,
+                                        height: 340,
+                                    },
+                                }}
+                            >
+                                {/* <MyOwnComponent /> */}
+                                <View style={styles.ModelPopUpContainer}>
+                                    <View style={styles.paymentImageContainer}>
+                                        <Image
+                                            source={require('../../assets/images/pending-payment.png')}
+                                            style={styles.paymentLogo} />
+                                    </View>
+                                    <View style={styles.paymentTextContainer}>
+                                        <Text style={styles.paymentText}>
+                                            You have an outstanding of
+                                            {/* <View style={styles.paymentTextRubeesContainer}> */}
+                                            <Text style={styles.paymentTextRubees}>{" Rs 30,000 "}</Text>
+                                            {/* </View> */}
+                                            with its due date
+                                            overdue, you need to make this payment to proceed
+                                            for Ordering parts.
+                                        </Text>
+                                    </View>
+                                    <View style={styles.laterAndPayNowContainer}>
+                                        <TouchableOpacity style={styles.laterAndPayFirst}
+                                            onPress={() => refRBSheet.current.close()}
+                                        >
+                                            <Text style={styles.laterText}>Later</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.laterAndPaySecond}>
+                                            <Text style={styles.payText}>Pay Now</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </RBSheet>
+                        </View>
+                    </View>
+                    <View style={styles.secondBottomContainer}>
+                        <Text style={styles.orderEtaText}>{"Order ETA"}</Text>
+                        <Text style={styles.dateText}>{"10 March 2021"}</Text>
+                        <Text style={styles.invoiceNoLabelText}>{"Invoice No"}</Text>
+                        <Text style={styles.invoiceNoText}>{"#GMM254549687"}</Text>
                     </View>
                 </View>
-                <View style={styles.secondBottomContainer}>
-                    <Text style={styles.orderEtaText}>{"Order ETA"}</Text>
-                    <Text style={styles.dateText}>{"10 March 2021"}</Text>
-                    <Text style={styles.invoiceNoLabelText}>{"Invoice No"}</Text>
-                    <Text style={styles.invoiceNoText}>{"#GMM254549687"}</Text>
-                </View>
-            </View>
             </DrawerLayoutAndroid>
         </View>
 
@@ -397,7 +427,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
     },
-
+    flatlistItemsContainerFocus: {
+        backgroundColor: '#191B1D',
+        width: 170,
+        // height: 135,
+        height: 115,
+        margin: 7,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#FCBA13',
+    },
     flatlistImageAndTextContainer: {
         alignItems: 'center',
     },
@@ -431,7 +472,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         // marginTop: 0,
-        marginBottom:57,
+        marginBottom: 57,
         // backgroundColor:'green'
     },
     bottomContainer: {

@@ -1,13 +1,19 @@
 import { SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import HelpScrollData from '../../../../LocalData/HelpScrollData'
+import HelpScrollData from '../../LocalData/HelpScrollData'
 // I DON'T KNOW BELOW FLATLIST. IT'S FROM GESTURE.
 import { FlatList } from 'react-native-gesture-handler'
 
-const OpenScreen = () => {
+const OpenScreen = ({navigation:{navigate}}) => {
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.flatlistMainContainer}>
+            <TouchableOpacity style={styles.flatlistMainContainer}
+            onPress={()=>{
+                alert(item.id);
+                if(item.id===1){
+                    navigate('TicketScreen')
+                }
+              }}>
                 <Text style={styles.ticketNumberText}>{item.ticketNumber}</Text>
                 <View style={styles.serialNumberTextContainer}>
                     <Text style={styles.serialNumberText}>{item.serialNumber.slice(0, 9)}</Text>

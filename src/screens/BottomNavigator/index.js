@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, Alert, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../Home';
@@ -6,9 +6,10 @@ import HelpScreen from './Help';
 import ChatScreen from './Chat';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
-const BottomNavigator = () => {
+const BottomNavigator = ({ navigation: { goBack } }) => {
     return (
         <Tab.Navigator
             screenOptions={
@@ -19,7 +20,7 @@ const BottomNavigator = () => {
                         position: 'absolute',
                         height: '7.0%',
                         borderRadius: 50,
-                        marginHorizontal: 10
+                        marginHorizontal: 10,
                     },
                     tabBarLabelStyle: {
                         // backgroundColor: 'green',
@@ -38,6 +39,55 @@ const BottomNavigator = () => {
                     },
                     tabBarActiveTintColor: '#FCBA13',
                     tabBarInactiveTintColor: '#FFFFFF',
+
+                    headerLeft: ({ tintColor, pressColor, pressOpacity, labelVisible }) => (
+                        <TouchableOpacity onPress={() => {
+                            goBack();
+                        }}>
+
+                            <Image source={require('../../assets/images/left_menu_back_icon.png')}
+                                style={styles.helpHeaderLeftImage}
+                            />
+                        </TouchableOpacity>
+
+                    ),
+
+                    headerTitle: () => (
+                        <View style={
+                            styles.helpHeaderImageContainer
+                        }>
+                            <Image source={require('../../assets/images/gmmco_assist_logo.png')}
+                                style={
+                                    styles.helpHeaderImage
+                                }
+                            />
+                        </View>
+                    ),
+                    headerRight: () => (
+                        <TouchableOpacity style={styles.helpHeaderRightContainer}
+                            onPress={() => Alert.alert('3 Shipping items available')}>
+                            <Image source={require('../../assets/images/shopping-cart.png')}
+                                style={[styles.helpHeaderRightImage, {
+                                    tintColor: 'black'
+                                }]}
+                            />
+                            <View style={styles.helpHeaderRightImageTextContainer}>
+                                <Text style={styles.helpHeaderRightImageText}>{"3"}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    ),
+                    headerStyle: {
+                        backgroundColor: '#FCBA13',
+                        height: 90,
+                        borderBottomLeftRadius: 20,
+                        borderBottomRightRadius: 20,
+                        // borderColor:'#000103',
+                    },
+                    headerTitleAlign: 'center',
+                    //Finally I got borderradius balance backgroundColor. Wow...
+                    headerBackgroundContainerStyle: {
+                        backgroundColor: '#000103'
+                    }
 
 
 
@@ -75,49 +125,56 @@ const BottomNavigator = () => {
                                 }]}
                             />
                         ),
-                        //    headerBackground:()=><Text>Hello</Text>
-                        // <HeaderBackButton label="Hello" />
-                        headerLeft: () => (
-                            <Image source={require('../../assets/images/left_menu_back_icon.png')}
-                                style={styles.helpHeaderLeftImage}
-                            />
-                        ),
-                        headerTitle: () => (
-                            <View style={
-                                styles.helpHeaderImageContainer
-                            }>
-                                <Image source={require('../../assets/images/gmmco_assist_logo.png')}
-                                    style={
-                                        styles.helpHeaderImage
-                                    }
-                                />
-                            </View>
-                        ),
-                        headerRight: () => (
-                            <View style={styles.helpHeaderRightContainer}>
-                                <Image source={require('../../assets/images/shopping-cart.png')}
-                                    style={[styles.helpHeaderRightImage, {
-                                        tintColor: 'black'
-                                    }]}
-                                />
-                                <View style={styles.helpHeaderRightImageTextContainer}>
-                                    <Text style={styles.helpHeaderRightImageText}>{"3"}</Text>
-                                </View>
-                            </View>
-                        ),
-                        headerStyle: {
-                            backgroundColor: '#FCBA13',
-                            height: 90,
-                            borderBottomLeftRadius: 20,
-                            borderBottomRightRadius: 20,
-                            // borderColor:'#000103',
-                        },
-                        headerTitleAlign: 'center',
-                        //Finally I got borderradius balance backgroundColor. Wow...
-                      headerBackgroundContainerStyle:{
-                        backgroundColor:'#000103'
-                      }
-                        
+
+                        // headerLeft: ({ tintColor, pressColor, pressOpacity, labelVisible }) => (
+                        //     <TouchableOpacity onPress={() => {
+                        //         goBack();
+                        //     }}>
+
+                        //         <Image source={require('../../assets/images/left_menu_back_icon.png')}
+                        //             style={styles.helpHeaderLeftImage}
+                        //         />
+                        //     </TouchableOpacity>
+
+                        // ),
+
+                        // headerTitle: () => (
+                        //     <View style={
+                        //         styles.helpHeaderImageContainer
+                        //     }>
+                        //         <Image source={require('../../assets/images/gmmco_assist_logo.png')}
+                        //             style={
+                        //                 styles.helpHeaderImage
+                        //             }
+                        //         />
+                        //     </View>
+                        // ),
+                        // headerRight: () => (
+                        //     <TouchableOpacity style={styles.helpHeaderRightContainer}
+                        //         onPress={() => Alert.alert('3 Shipping items available')}>
+                        //         <Image source={require('../../assets/images/shopping-cart.png')}
+                        //             style={[styles.helpHeaderRightImage, {
+                        //                 tintColor: 'black'
+                        //             }]}
+                        //         />
+                        //         <View style={styles.helpHeaderRightImageTextContainer}>
+                        //             <Text style={styles.helpHeaderRightImageText}>{"3"}</Text>
+                        //         </View>
+                        //     </TouchableOpacity>
+                        // ),
+                        // headerStyle: {
+                        //     backgroundColor: '#FCBA13',
+                        //     height: 90,
+                        //     borderBottomLeftRadius: 20,
+                        //     borderBottomRightRadius: 20,
+                        //     // borderColor:'#000103',
+                        // },
+                        // headerTitleAlign: 'center',
+                        // //Finally I got borderradius balance backgroundColor. Wow...
+                        // headerBackgroundContainerStyle: {
+                        //     backgroundColor: '#000103'
+                        // }
+
 
                     }
                 }
@@ -125,14 +182,15 @@ const BottomNavigator = () => {
             <Tab.Screen name='Chat' component={ChatScreen}
                 options={
                     {
-                        headerShown: false,
+                        // headerShown: false,
                         tabBarIcon: ({ focused, size, color }) => (
                             <Image source={require('../../assets/images/chat_bottom.png')}
                                 style={[styles.tabBarIconImage, {
                                     tintColor: color
                                 }]}
                             />
-                        )
+                        ),
+
                     }
                 } />
         </Tab.Navigator>

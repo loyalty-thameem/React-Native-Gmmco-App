@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native'
 import React, { useRef } from 'react'
 // I DON'T KNOW BELOW FLATLIST. IT'S FROM GESTURE.
 import { FlatList} from 'react-native-gesture-handler'
 import HelpFirstData from '../../LocalData/HelpFirstData'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import OpenScreen from './TopTabNavigator/Open'
-import ClosedScreen from './TopTabNavigator/Closed'
-import InprogressScreen from './TopTabNavigator/Inprogress'
+// import OpenScreen from './TopTabNavigator/Open'
+// import ClosedScreen from './TopTabNavigator/Closed'
+// import InprogressScreen from './TopTabNavigator/Inprogress'
+import OpenScreen from '../../TopTabNavigator/Open'
+import InprogressScreen from '../../TopTabNavigator/Inprogress'
+import ClosedScreen from '../../TopTabNavigator/Closed'
 const renderItem = ({ item }) => {
   return (
     <TouchableOpacity style={styles.flatlistViewRenderData}>
